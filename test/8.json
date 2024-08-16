@@ -1,0 +1,1 @@
+{"name":"8.插入数据","nodeId":"8","dsName":"Gbase_6_DM","sql":"insert into DM_PUB_INCREASE_01_${monthid} \\nselect * from DM_PUB_INCREASE_01_${monthid}@dblink_dm;","parentDsName":"Gbase_6_DM"}

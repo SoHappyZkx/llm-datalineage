@@ -1,0 +1,1 @@
+{"name":"创建表","nodeId":"7","dsName":"Gbase_6_DM","sql":"drop table DM_PUB_INCREASE_01_${monthid};\\ncreate table DM_PUB_INCREASE_01_${monthid} distributed by ('PRODUCT_NO') as select * from DM_PUB_INCREASE_01_YYYYMM;","parentDsName":"Gbase_6_DM"}

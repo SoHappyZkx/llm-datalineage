@@ -1,0 +1,22 @@
+
+
+
+
+
+
+    [
+        {
+        "source":"table1.phone_no",
+        "usage":["value","join"],
+        "target":"dm_top25_lost_cause_user456_ms_${monthid}.phone_no",
+        "relation":["equals","left join on phone_no"]
+        },
+
+        {
+        "source":"table1.phone_no",
+        "usage":["value","join"],
+        "target":"dm_top25_lost_cause_user456_ms_${monthid}.phone_no",
+        "relation":["equals","left join on phone_no"]
+        }
+
+    ]
