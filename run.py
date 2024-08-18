@@ -112,12 +112,15 @@ def step2_sql_postprocess(load_dir,output_dir,OVERWRITE=True,APPEND_JSON=True):
 
 
 
-def step3_sql_split_multi_feature(load_dir,output_dir,OVERWRITE=True):
+def step3_sql_split_multi_feature(load_dir,output_dir,excel_file,OVERWRITE=True):
     '''
     直接拆分出多个代码片段，每个代码片段都是一个指标的相关代码，避免输出过多，大模型无法有效处理
+    可以直接从excel表中获取关键excel里的每个表的字段，逐渐找
     '''
     if os.path.exists(output_dir) == False:
         os.makedirs(output_dir)
+        
+    df = pd.read_excel(excel_file,sheet_name='模型信息')
     for root, dirs, files in os.walk(load_dir):
         for sub_dir in tqdm(dirs):
             sub_dir_path = os.path.join(output_dir,sub_dir)
@@ -145,5 +148,7 @@ if __name__ == "__main__":
     #step2_sql_postprocess(step1_output_dir, step2_output_dir,OVERWRITE=True, APPEND_JSON=False)
     
     
-    step3_output_dir = "F:\\GITClone\\CMCCtest\\dateline\\data_trans\\step3\\"
-    step3_sql_split_multi_feature(step2_output_dir, step3_output_dir,OVERWRITE=True)
+    excel_file = "E:\\个人\\工作\\llm-datalineage\\data\\dataos自助相关程序配置信息 (1)(1).xlsx"
+    # step3_output_dir = "F:\\GITClone\\CMCCtest\\dateline\\data_trans\\step3\\"
+    # step3_sql_split_multi_feature(step2_output_dir, step3_output_dir,excel_file, OVERWRITE=True)
+    process.test2()
