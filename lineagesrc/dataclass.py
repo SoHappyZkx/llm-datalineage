@@ -20,7 +20,7 @@ class SQLNodes:
 可以保存tables和内部的所有fileds 这是从excel表格里读出来的，不是直接获取的具体内容
 '''
 class SQLTables:
-    def __init__(self, prod_name,table_name):
+    def __init__(self, table_name,prod_name):
         '''
         prod_name 是中文名
         table_name 是英文名
@@ -33,8 +33,11 @@ class SQLTables:
         '''
         self.table_name = table_name
         self.prod_name = prod_name
+        self.sql_table_name = ''
+        self.sql_prod_name = ''
         self.PERIODIC = ''
         self.FOUND_SQL = False
+        self.FOUND_SCHEMA = False
         self.SCHEDULE_TABLE = False
         self.STATE = ''
         self.field_dict = {}
@@ -45,11 +48,17 @@ class SQLTables:
     def parse(self,new_table_name):
         '''
         TODO 还有很多表不是DM_这个结构，需要对应下试试
+        但目前看，只有DIAO的才是调度视图，才能保证有M,或者D
         '''
         if "DIAO" in new_table_name:
-            self.SCHEDULE_TABLE =True
-        segs = new_table_name.split('_')
-        self.PERIODIC = segs[1]
+            self.SCHEDULE_TABLE =True #DIAO是充分必要条件！
+            segs = new_table_name.split('_')
+            self.PERIODIC = segs[1]
+        elif "_D_" in new_table_name:
+            self.PERIODIC = 'D'
+        elif "_M_" in new_table_name:
+            self.PERIODIC = 'M'
+    
         
 class SQLGraph:
     def __init__(self,data):
