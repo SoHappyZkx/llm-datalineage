@@ -58,6 +58,8 @@ class SQLTables:
             self.PERIODIC = 'D'
         elif "_M_" in new_table_name:
             self.PERIODIC = 'M'
+    def to_json(self):
+        return json.dumps(self.__dict__,ensure_ascii=False,indent=4)
     
         
 class SQLGraph:
