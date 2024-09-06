@@ -1,0 +1,63 @@
+'这段SQL代码中涉及的表名如下所示，已转换为JSON格式：\n\n```json\n{"tables":["${TARGET_DM_AUTORPT_CALL_YYYYMM}","${SOURCE_DWI_USR_PESN_PARTINFO_MS_YYYYMM}","${SOURCE_DWI_BEH_USE_VOC_USERTOT_MS_YYYYMM}","${SOURCE_DWI_BEH_USE_VOC_ROAMTOT_MS_YYYYMM}","${SOURCE_DWI_BEH_USE_VOC_TOLLTOT_MS_YYYYMM}","${SOURCE_DWD_EVT_CDR_VOC_BASETOT_MS_YYYYMM}"]}\n```'
+
+
+'根据提供的SQL代码，我们可以识别出几个不同的表以及它们各自涉及到的字段。以下是这些表及其相关字段的JSON格式表示：\n\n```json\n{\n    "tmp_20150512_gprs_${dayid}": ["phone_no", "dg_USE_RES_NUM"],\n    "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}": ["phone_no", "PROD_KIND_CODE", "MONTH_ARRIVE_FLAG", "MONTH_OFF_FLAG", "MONTH_NEW_FLAG"],\n    "dm.dim_dx_flow": ["plan_id", "use_type", "USE_RES_NUM", "TOTAL_RES_NUM"],\n    "gbasedwi.${table_name.name1}": ["phone_no", "plan_id", "USE_RES_NUM", "TOTAL_RES_NUM"],\n    "gbasemsm.msm_dw_basekpi_110673_detail_${dayid}": ["phone_no"],\n    "gbasedwd.${tablename.dwdfreeres1}": ["phone_no", "item_code", "FREE_RES_USE_NUM", "FREE_RES_TOTAL_NUM", "boss_prod_id"],\n    "dm.dim_pub_freeres_lty_itemcode": ["item_code"]\n}\n```\n\n注意：在提供的SQL代码中，`"${dayid}"` 和 `${table_name.name1}`、`${tablename.dwdfreeres1}` 是占位符，实际使用时需要替换为具体的值或表名。在上述结果中，我保留了这些占位符以便与原始SQL保持一致。'
+
+
+
+'''
+    drop table tmp_20150512_gprs_${dayid};
+        CREATE TABLE tmp_20150512_gprs_${dayid}     
+        (     
+        phone_no varchar(20) ,
+        dg_USE_RES_NUM int , 
+        ) distributed by ('phone_no');
+        insert into tmp_20150512_gprs_${dayid}
+        select a.phone_no,
+        b.dg_USE_RES_NUM,    
+        b.dg_TOTAL_RES_NUM,  
+        c.zs_USE_RES_NUM,    
+        c.zs_TOTAL_RES_NUM ,   
+        d.RES_USE_NUM,   
+        case when e.phone_no is not null then 1 else 0 end is_4G_valid_user 
+    from gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid} a        
+    left join (select  b.phone_no,
+        sum(b.USE_RES_NUM/1024/1024) dg_USE_RES_NUM,
+        sum(b.TOTAL_RES_NUM/1024/1024) dg_TOTAL_RES_NUM 
+    from dm.dim_dx_flow a
+    left join gbasedwi.${table_name.name1} b on a.plan_id=b.plan_id and a.use_type=b.use_type 
+    group by phone_no
+        ) b on a.phone_no=b.phone_no
+    left join ( 
+        select  phone_no,
+        sum(USE_RES_NUM/1024/1024) zs_USE_RES_NUM, 
+        sum(TOTAL_RES_NUM/1024/1024) zs_TOTAL_RES_NUM 
+    from gbasedwi.${table_name.name1} 
+    where plan_id='111002069417'
+    group by phone_no    
+        ) c on a.phone_no=c.phone_no
+    left join (
+        select phone_no,
+        sum(case when b.item_code is not null then a.FREE_RES_USE_NUM else 0 end)/1024 RES_USE_NUM    
+    from gbasedwd.${tablename.dwdfreeres1} a
+    left join (
+        select item_code from dm.dim_pub_freeres_lty_itemcode group by item_code
+        ) b on a.item_code=b.item_code
+    where boss_prod_id not in ('54001105','53005095','50002352','54001809') and to_number(FREE_RES_TOTAL_NUM)<1000000000000000000
+    group by a.phone_no
+        ) d on a.phone_no=d.phone_no
+    left join (
+        select phone_no from gbasemsm.msm_dw_basekpi_110673_detail_${dayid} group by phone_no
+        ) e on a.phone_no=e.phone_no
+    where a.PROD_KIND_CODE='171000000001'  And (a.MONTH_ARRIVE_FLAG = 1 Or a.MONTH_OFF_FLAG = 1 or a.MONTH_NEW_FLAG = 1);
+'''
+
+{
+    'tmp_20150512_gprs_${dayid}': ['phone_no', 'dg_USE_RES_NUM', 'is_4G_valid_user'], 
+    'gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}': ['phone_no', 'PROD_KIND_CODE', 'MONTH_ARRIVE_FLAG', 'MONTH_OFF_FLAG', 'MONTH_NEW_FLAG'], 
+    'dm.dim_dx_flow': ['plan_id', 'use_type', 'USE_RES_NUM', 'TOTAL_RES_NUM'], 
+    'gbasedwi.${table_name.name1}': ['phone_no', 'plan_id', 'USE_RES_NUM', 'TOTAL_RES_NUM'], 
+    'gbasemsm.msm_dw_basekpi_110673_detail_${dayid}': ['phone_no'], 
+    'dm.dim_pub_freeres_lty_itemcode': ['item_code'], 
+    'gbasedwd.${tablename.dwdfreeres1}': ['phone_no', 'item_code', 'FREE_RES_USE_NUM', 'FREE_RES_TOTAL_NUM', 'boss_prod_id']
+}

@@ -52,10 +52,10 @@ def get_response_template(client:OpenAI, model_name:str, messages_list:list, str
                 content_str+=content_
                 print(content_,end='')
                 if  chunk.choices[0].finish_reason:
-                    finish_reason_ = chunk.choices[0].finish_reason
+                    finish_reason_ = chunk.choices[0].finish_reason  
                     Finish_flag=True
 
-            
+        #9230 - >3695
         return content_str, finish_reason_, chunk.usage.prompt_tokens,  chunk.usage.completion_tokens,  chunk.usage.total_tokens
     else:
         completion = client.chat.completions.create(
@@ -65,7 +65,7 @@ def get_response_template(client:OpenAI, model_name:str, messages_list:list, str
             top_p=0.8
             )
         answer_content = completion.choices[0].message.content
-        finish_reason = completion.choices[0].finish_reason
+        finish_reason = completion.choices[0].finish_reason  # 长度过长: length, 正常结束: stop
         tokens_dict = completion.usage
         return answer_content, finish_reason,  tokens_dict.prompt_tokens,  tokens_dict.completion_tokens,  tokens_dict.total_tokens
 #depracated
@@ -168,7 +168,7 @@ def test2():
     system_prompt_list = [system_prompt, sql_code]
     question = """ 请把这段sql代码中所有的表名和字段名输出，使用json格式，格式如下：'{"表名1":["字段名1","字段名2","字段名3], "表名2":["字段名4","字段名5"]}' 注意不要其他任何描述和结论，只要输出json内容"""
     client = init_client(API_KEY,PLATFORM)
-    answer_content, finish_reason, completion_tokens,prompt_tokens,total_tokens = get_response(client, model_name, system_prompt_list, question)
+    answer_content, finish_reason, completion_tokens,prompt_tokens,total_tokens = get_response(client, model_name, system_prompt_list, question,stream=False)
     
     print(answer_content)
     print(finish_reason)
@@ -176,6 +176,6 @@ def test2():
 
 if __name__ == "__main__":
         
-    #test1()
-    test2()
+    test1()
+    #test2()
     
