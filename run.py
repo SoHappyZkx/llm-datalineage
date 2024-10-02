@@ -40,7 +40,7 @@ def step1_trans_sql_code(file_path, output_dir,OVERWRITE=False):
                 os.makedirs(save_sub_dir)
 
             save_sql_name = f"{i[1]}-{int(i[7])}.sql"
-            # if "2012年12月新增指标-143.sql" not in save_sql_name:
+            # if "2015年5月新增日累计指标-206.sql" not in save_sql_name:
             #     continue 
             if os.path.exists(os.path.join(save_sub_dir,save_sql_name)) and not OVERWRITE: #文件存在直接跳过
                 loaded_count+=1
@@ -76,6 +76,7 @@ def step1_trans_sql_code(file_path, output_dir,OVERWRITE=False):
 def step2_sql_postprocess(load_dir,output_dir,OVERWRITE=True,APPEND_JSON=True):
     '''
     todo: 2012年12月新增指标-25.sql 里面有的/**/是代码注释，有的是字段注释，很难全部弄清楚。
+    APPEND_JSON 是否将注释内容追击到存在的文件里。True表示试图里存一个！
     '''
     if os.path.exists(output_dir) == False:
         os.makedirs(output_dir)
@@ -139,16 +140,18 @@ def step3_sql_split_multi_feature(load_dir,output_dir,excel_file,OVERWRITE=True)
                         f.writelines(new_sql)
 
 if __name__ == "__main__":
-    file1 = "F:\\GITClone\\CMCCtest\\dateline\\data\\自助sql代码格式清理-p1.xlsx"
-    step1_output_dir = "F:\\GITClone\\CMCCtest\\dateline\\data_trans\\step1\\"
-    #step1_trans_sql_code(file1, step1_output_dir)
+    ROOT_PATH = "E:\\个人\\工作\\llm-datalineage"
+    
+    file1 = f"{ROOT_PATH}\\data\\自助sql代码格式清理-p1.xlsx"
+    step1_output_dir = f"{ROOT_PATH}\\data_trans\\step1\\"
+    #step1_trans_sql_code(file1, step1_output_dir,OVERWRITE=True)
     
     
-    step2_output_dir = "F:\\GITClone\\CMCCtest\\dateline\\data_trans\\step2\\"
-    #step2_sql_postprocess(step1_output_dir, step2_output_dir,OVERWRITE=True, APPEND_JSON=False)
+    step2_output_dir = f"{ROOT_PATH}\\data_trans\\step2\\"
+    step2_sql_postprocess(step1_output_dir, step2_output_dir,OVERWRITE=True, APPEND_JSON=True)
     
     
-    excel_file = "E:\\个人\\工作\\llm-datalineage\\data\\dataos自助相关程序配置信息 (1)(1).xlsx"
+    #excel_file = f"{ROOT_PATH}\\data\\dataos自助相关程序配置信息 (1)(1).xlsx"
     # step3_output_dir = "F:\\GITClone\\CMCCtest\\dateline\\data_trans\\step3\\"
     # step3_sql_split_multi_feature(step2_output_dir, step3_output_dir,excel_file, OVERWRITE=True)
-    process.test2()
+    #process.test2()

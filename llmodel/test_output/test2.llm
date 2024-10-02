@@ -1,0 +1,9 @@
+[
+    {"source_field": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}.phone_no", "target_field": "tmp_20150512_gprs_${dayid}.phone_no", "relationship": "EQUAL", "description": "select a.phone_no..."},
+    {"source_field": "gbasedwi.${table_name.name1}.USE_RES_NUM", "target_field": "tmp_20150512_gprs_${dayid}.dg_USE_RES_NUM", "relationship": "NUMERICAL", "description": "sum(b.USE_RES_NUM/1024/1024) dg_USE_RES_NUM..."},
+    {"source_field": "gbasedwi.${table_name.name1}.TOTAL_RES_NUM", "target_field": "tmp_20150512_gprs_${dayid}.dg_TOTAL_RES_NUM", "relationship": "NUMERICAL", "description": "sum(b.TOTAL_RES_NUM/1024/1024) dg_TOTAL_RES_NUM..."},
+    {"source_field": "gbasedwi.${table_name.name1}.USE_RES_NUM", "target_field": "tmp_20150512_gprs_${dayid}.zs_USE_RES_NUM", "relationship": "NUMERICAL", "description": "sum(USE_RES_NUM/1024/1024) zs_USE_RES_NUM..."},
+    {"source_field": "gbasedwi.${table_name.name1}.TOTAL_RES_NUM", "target_field": "tmp_20150512_gprs_${dayid}.zs_TOTAL_RES_NUM", "relationship": "NUMERICAL", "description": "sum(TOTAL_RES_NUM/1024/1024) zs_TOTAL_RES_NUM..."},
+    {"source_field": "gbasedwd.${tablename.dwdfreeres1}.FREE_RES_USE_NUM", "target_field": "tmp_20150512_gprs_${dayid}.RES_USE_NUM", "relationship": "NUMERICAL", "description": "sum(case when b.item_code is not null then a.FREE_RES_USE_NUM else 0 end)/1024 RES_USE_NUM..."},
+    {"source_field": "gbasemsm.msm_dw_basekpi_110673_detail_${dayid}.phone_no", "target_field": "tmp_20150512_gprs_${dayid}.is_4G_valid_user", "relationship": "CONDITION", "description": "case when e.phone_no is not null then 1 else 0 end is_4G_valid_user..."}
+]

@@ -175,7 +175,7 @@ def test2():
     print(prompt_tokens, completion_tokens, total_tokens)
 
 if __name__ == "__main__":
-        
-    test1()
+    print("")
+    #test1()
     #test2()
     

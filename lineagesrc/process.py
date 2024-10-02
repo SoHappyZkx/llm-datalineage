@@ -425,4 +425,3 @@ def test3():
     save_obj_dicts(save_obj_path, table_obj_dict)
     new_dict = load_obj_dicts(save_obj_path)
     print(len(new_dict.keys()))
-test3()

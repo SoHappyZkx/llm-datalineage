@@ -40,6 +40,10 @@ def step1_trans_sql_code(file_path, output_dir,save_path,OVERWRITE=False):
     for i in tqdm(df1.itertuples(),total=len(df1)):
     #for i in df1.itertuples():
         try:
+            
+            if str(i[1])!="2015年5月新增日累计指标" or int(i[7])!=206:
+                continue
+            
             #print(f"{i[0]}/{len(df1)}") # debug
             load_sub_dir = os.path.join(output_dir,str(i[1]))
             load_file_name = f"{i[1]}-{int(i[7])}.sql"
@@ -87,14 +91,29 @@ def select_table(sql_code_file, all_excel_file, select_list):
     table_list = parser.get_table_list(sql_code_str)
     return table_list
 
+
+def test_file(ROOT_PATH):
+    
+    file1 = f"{ROOT_PATH}\\data\\自助sql代码格式清理-p1.xlsx"
+    step1_output_dir = f"{ROOT_PATH}\\debug\\step1\\"
+    step1_trans_sql_code(file1, step1_output_dir,save_path)
+
 if __name__ == "__main__":
-    file1 = "F:\\GITClone\\CMCCtest\\dateline\\data\\自助sql代码格式清理-p1.xlsx"
-    step1_output_dir = "F:\\GITClone\\CMCCtest\\dateline\\data_trans\\step1\\"
-    step2_output_dir = "F:\\GITClone\\CMCCtest\\dateline\\data_trans\\step2\\"
-    save_path = "F:\\GITClone\\CMCCtest\\dateline\\data\\自助sql代码格式清理-去注释.xlsx"
-    step1_trans_sql_code(file1, step2_output_dir,save_path)
+    '''
+    最开始就是为了生成所有没有注释的sql代码！给poc测试用，平时不用这个
+    '''
+    ROOT_PATH = "E:\个人\工作\llm-datalineage"
+    file1 = f"{ROOT_PATH}\\data\\自助sql代码格式清理-p1.xlsx"
+    step1_output_dir = f"{ROOT_PATH}\\data_trans\\step1\\"
+    step2_output_dir = f"{ROOT_PATH}\\data_trans\\step2\\"
+    save_path = f"{ROOT_PATH}\\data\\自助sql代码格式清理-去注释.xlsx"
+    #step1_trans_sql_code(file1, step2_output_dir,save_path)
     #step2_sql_postprocess(step1_output_dir, step2_output_dir,OVERWRITE=True, APPEND_JSON=False)
     
     
     # step3_output_dir = "F:\\GITClone\\CMCCtest\\dateline\\data_trans\\step3\\"
     # step3_sql_split_multi_feature(step2_output_dir, step3_output_dir,OVERWRITE=True)
+    
+    
+    
+    test_file(ROOT_PATH)

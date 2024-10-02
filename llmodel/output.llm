@@ -61,3 +61,30 @@
     'dm.dim_pub_freeres_lty_itemcode': ['item_code'], 
     'gbasedwd.${tablename.dwdfreeres1}': ['phone_no', 'item_code', 'FREE_RES_USE_NUM', 'FREE_RES_TOTAL_NUM', 'boss_prod_id']
 }
+
+
+
+
+dx_flow.TOTAL_RES_NUM', 'target_field': 'dg_TOTAL_RES_NUM', 'relationship': 'NUMERICAL', 'description': 'sum(b.TOTAL_RES_NUM/1024/1024) dg_TOTAL_RES_NUM'}, {'source_field': 'gbasedwi.${table_name.name1}.USE_RES_NUM', 'target_field': 'zs_USE_RES_NUM', 'relationship': 'NUMERICAL', 'description': 'sum(USE_RES_NUM/1024/1024) zs_USE_RES_NUM'}, {'source_field': 'gbasedwi.${table_name.name1}.TOTAL_RES_NUM', 'target_field': 'zs_TOTAL_RES_NUM', 'relationship': 'NUMERICAL', 'description': 'sum(TOTAL_RES_NUM/1024/1024) zs_TOTAL_RES_NUM'}, {'source_field': 'gbasedwd.${tablename.dwdfreeres1}.FREE_RES_USE_NUM', 'target_field': 'RES_USE_NUM', 'relationship': 'NUMERICAL', 'description': 'sum(case when b.item_code is not null then a.FREE_RES_USE_NUM else 0 end)/1024 RES_USE_NUM'}, {'source_field': 'gbasemsm.msm_dw_basekpi_110673_detail_${dayid}.phone_no', 'target_field': 'is_4G_valid_user', 'relationship': 'CONDITION', 'description': 'case when e.phone_no is not null then 1 else 0 end is_4G_valid_user'}, {'source_field': 'gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}.PROD_KIND_CODE', 'target_field': 'tmp_20150512_gprs_${dayid}', 'relationship': 'FILTER', 'description': "where a.PROD_KIND_CODE='171000000001'"}, {'source_field': 'gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}.MONTH_ARRIVE_FLAG', 'target_field': 'tmp_20150512_gprs_${dayid}', 'relationship': 'FILTER', 'description': 'And (a.MONTH_ARRIVE_FLAG = 1 Or a.MONTH_OFF_FLAG = 1 or a.MONTH_NEW_FLAG = 1)'}, {'source_field': 'gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}.MONTH_OFF_FLAG', 'target_field': 'tmp_20150512_gprs_${dayid}', 'relationship': 'FILTER', 'description': 'And (a.MONTH_ARRIVE_FLAG = 1 Or a.MONTH_OFF_FLAG = 1 or a.MONTH_NEW_FLAG = 1)'}, {'source_field': 'gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}.MONTH_NEW_FLAG', 'target_field': 'tmp_20150512_gprs_${dayid}', 'relationship': 'FILTER', 'description': 'And (a.MONTH_ARRIVE_FLAG = 1 Or a.MONTH_OFF_FLAG = 1 or a.MONTH_NEW_FLAG = 1)'}
+
+
+{
+dx_fdx_flow.TOTAL_RES_NUM', 
+'target_field': 'dg_TOTAL_RES_NUM', 
+'relationship': 'NUMERICAL', 
+'description': 'sum(b.TOTAL_RES_NUM/1024/1024) dg_TOTAL_RES_NUM'
+}, 
+{'sourdx_flow.TOTAL_RES_NUM', 
+'target_field': 'dg_TOTAL_RES_NUM', 
+'relationship': 'NUMERICAL', 
+'description': 'sum(b.TOTAL_RES_NUM/1024/1024) dg_TOTAL_RES_NUM'
+}, 
+{'source_field':dx_flow.TOTAL_RES_NUM', 
+'target_field': 'dg_TOTAL_RES_NUM', 
+'relationship': 'NUMERICAL', 
+'description': 'sum(b.TOTAL_RES_NUM/1024/1024) dg_TOTAL_RES_NUM'
+}, 
+{'source_field':dx_flow.TOTAL_RES_NUM', 
+'target_field': 'dg_TOTAL_RES_NUM', 
+'relationship': 'NUMERICAL', 
+'description': 'sum(b.TOTAL_RES_NUM/1024/10dx_flow.TOTAL_RES_NUM', 'target_field': 'dg_TOTAL_RES_NUM', 'relationship': 'NUMERICAL', 'description': 'sum(b.TOTAL_RES_NUM/1024/1024) dg_TOTAL_Rdx_flow.TOTAL_RES_NUM', 'target_field': 'dg_TOTAL_RES_NUM', 'relationship': 'NUMERICAL', 'descriptdx_flow.TOTAL_RES_NUM', 'target_field': 'dg_TOTAL_RES_NUM', 'relationship': 'NUMERICAL', 'description': 'sum(b.TOTAL_RES_NUM/1024/1024) dx_flow.TOTAL_RES_NUM', 'target_TOTAL_RES_NUM'}, {'sourcTOTAL_RES_NUM'},TOTAL_RES_NUM'}, {'source_field': 'gbasedwi.${table_name.name1}.USE_RES_NUM', 'target_field': 'zs_USE_RES_NUM', 'relationship': 'NUMERICAL', 'description': 'sTOTAL_RES_NUM'}, {'source_field': 'gbasedwi.${table_name.name1}.USE_RES_NUM', 'target_field': 'zs_USE_RES_NUM', 'relationship': 'NUMERICAL', 'dTOTAL_RES_NUM'}, {'source_field': 'gbasedwi.${table_name.name1}.USE_RES_NUM', 'target_field': 'zs_USE_RES_NUM', 'relationship': 'NUMERICAL', 'dTOTAL_RES_NUM'}, {'source_field': 'gbasedwi.${table_name.name1}.USE_RES_NUM', 'target_field': 'zs_USE_RES_NUM', 'relationship': 'NUMERICAL', 'dTOTAL_RES_NUM'}, {'source_field': 'gbasedwi.${table_name.name1}.USE_RES_NUM', 'target_field': 'zs_USE_RES_NUM', 'relationship': 'NUMERICAL', 'dTOTAL_RES_NUM'}, {'source_field': 'gbasedwi.${table_name.name1}.USE_RES_NUM', 'target_field': 'zs_TOTAL_RES_NUM'}, {'source_field': 'gbasedwi.$TOTAL_RES_NUM'}TOTAL_RES_NUM'}TOTAL_RES_NUM'}, {'source_field': 'gbasedwi.${table_name.name1}.USE_RES_NUM', 'target_field': 'zs_USE_RES_NUM', 'relationship': 'NUMERICAL', 'description': 'sum(USE_RES_NUM/1024/1024) zs_USE_RES_NUM'}, {'source_field': 'gbasedwi.${table_name.name1}.TOTAL_RES_NUM', 'target_field': 'zs_TOTAL_RES_NUM', 'relationship': 'NUMERICAL', 'description': 'sum(TOTAL_RES_NUM/1024/1024) zs_TOTAL_RES_NUM'}, {'source_field': 'gbasedwd.${tablename.dwdfreeres1}.FREE_RES_USE_NUM', 'target_field': 'RES_USE_NUM', 'relationship': 'NUMERICAL', 'description': 'sum(case when b.item_code is not null then a.FREE_RES_USE_NUM else 0 end)/1024 RES_USE_NUM'}, {'source_field': 'gbasemsm.msm_dw_basekpi_110673_detail_${dayid}.phone_no', 'target_field': 'is_4G_valid_user', 'relationship': 'CONDITION', 'description': 'case when e.phone_no is not null then 1 else 0 end is_4G_valid_user'}, {'source_field': 'gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}.PROD_KIND_CODE', 'target_field': 'tmp_20150512_gprs_${dayid}', 'relationship': 'FILTER', 'description': "where a.PROD_KIND_CODE='171000000001'"}, {'source_field': 'gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}.MONTH_ARRIVE_FLAG', 'target_field': 'tmp_20150512_gprs_${dayid}', 'relationship': 'FILTER', 'description': 'And (a.MONTH_ARRIVE_FLAG = 1 Or a.MONTH_OFF_FLAG = 1 or a.MONTH_NEW_FLAG = 1)'}, {'source_field': 'gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}.MONTH_OFF_FLAG', 'target_field': 'tmp_20150512_gprs_${dayid}', 'relationship': 'FILTER', 'description': 'And (a.MONTH_ARRIVE_FLAG = 1 Or a.MONTH_OFF_FLAG = 1 or a.MONTH_NEW_FLAG = 1)'}, {'source_field': 'gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}.MONTH_NEW_FLAG', 'target_field': 'tmp_20150512_gprs_${dayid}', 'relationship': 'FILTER', 'description': 'And (a.MONTH_ARRIVE_FLAG = 1 Or a.MONTH_OFF_FLAG = 1 or a.MONTH_NEW_FLAG = 1)'}

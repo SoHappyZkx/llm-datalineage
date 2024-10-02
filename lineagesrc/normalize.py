@@ -46,8 +46,10 @@ def format_sql(sql_code):
     formatted_sql = re.sub(r'\n    (from|left join|where|and|or|group by|order by)', r'\n\1', formatted_sql)  # 减少关键字前的缩进
 
     # 加入正则匹配，处理函数结束和字段名中间没有空格的问题
-    formatted_sql = re.sub(r'(\)\s*)([a-zA-Z_]\w*)' , r') \2', formatted_sql)  
-
+    #formatted_sql = re.sub(r'(\)\s*)([a-zA-Z_]\w*)' , r') \2', formatted_sql)  #会导致一些 )\n 的地方，也匹配到，把\n 用 空格替换了。
+    #formatted_sql = re.sub(r'\)(?=[a-zA-Z_](?![nt]))', r') ', formatted_sql) # 加了与检查
+    formatted_sql = re.sub(r'\)(?=[a-zA-Z_]\w*)', r') ', formatted_sql) #或者严格一些，直接匹配)后必须是变量名，否则不加空格
+    #formatted_sql = re.sub(r'\)(?![\s\\])', r') ', formatted_sql) # 加了反向检查，确保匹配的后面不是任何空白和转义符
     # 2. 在每个SQL关键字前添加换行
     # keywords = ['SELECT', 'FROM', 'WHERE', 'GROUP BY', 'ORDER BY', 'LEFT JOIN', 'RIGHT JOIN', 'INNER JOIN', 'OUTER JOIN']
     # for keyword in keywords:
