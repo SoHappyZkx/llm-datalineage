@@ -25,5 +25,8 @@ def test():
     sorted_index = sorted(range(len(len_list)), key=lambda k: len_list[k], reverse=True)
     for i in sorted_index:
         print(file_list[i],len_list[i])
+    with open("./sql_code_length_static.log",'w',encoding='utf-8') as f:
+        for i in sorted_index:
+            f.write(file_list[i] + " " + str(len_list[i]) + "\n")
         
 test()

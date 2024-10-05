@@ -6,6 +6,9 @@ import lineagesrc.process as process
 import lineagesrc.parser as parser
 import lineagesrc.dataclass as dataclass
 import lineagesrc.comment as comment
+import lineagesrc.utils as utils
+import llmodel.llmapi as llmapi
+import llmodel.llmprompt as llmpmt
 from tqdm import tqdm
 import loginfo.mylogger as logger
 
@@ -21,6 +24,7 @@ step0 手动删除导出的excel中乱码，格式错乱的部分。目前比较
 存在部分格式化错误的问题，目前难以结局
 todo： 解决 tab 制表符缺失，格式比较混乱的问题。
 '''
+
 def step1_trans_sql_code(file_path, output_dir,OVERWRITE=False):
 
     error_count = 0
@@ -112,8 +116,8 @@ def step2_sql_postprocess(load_dir,output_dir,OVERWRITE=True,APPEND_JSON=True):
             comment.save_comment_dict_file(comment_dict,comment_file_path)
 
 
-
-def step3_sql_split_multi_feature(load_dir,output_dir,excel_file,OVERWRITE=True):
+@utils.deprecated
+def step3_sql_split_multi_feature_v1(load_dir,output_dir,excel_file,OVERWRITE=True):
     '''
     直接拆分出多个代码片段，每个代码片段都是一个指标的相关代码，避免输出过多，大模型无法有效处理
     可以直接从excel表中获取关键excel里的每个表的字段，逐渐找
@@ -139,8 +143,66 @@ def step3_sql_split_multi_feature(load_dir,output_dir,excel_file,OVERWRITE=True)
                     with open(os.path.join(sub_dir_path,file), 'w', encoding='utf-8') as f:
                         f.writelines(new_sql)
 
+
+def get_client(model_name):
+    if "qwen" in model_name:
+        API_KEY = "sk-fbd56500a79e44a79ceaae02d567f25e"
+        PLATFORM = "qwen".upper()
+        model_name = model_name #要求把sql内容放在system里
+        client = llmapi.init_client(API_KEY,PLATFORM)
+    elif "genimi" in model_name:
+        API_KEY = "AIzaSyA1JOXcA0B-sXcMli2926VsgMQfkh6BKtI"
+    return client
+
+def step3_sql_json(load_dir,output_dir,model_name='qwen-max-latest',PREFIX_LIST=['stop','META'], PROMPT_TYPE='field',OVERWRITE=True):
+    '''
+    PROMPT_TYPE: 用于存储文件后缀(suffix)，以及选择不同的提示词模板类别
+    PREFIX: 文件前缀，用于记录文件是否为正常完成的内容。stop是默认大模型返回的标准结束结果。也用于检查文件是否存在，是否需要重新生成
+    '''
+    
+    
+    sql_client = get_client(model_name)
+    if os.path.exists(output_dir) == False:
+        os.makedirs(output_dir)
+    all_count = 0
+    error_count = 0
+    finish_count = 0
+    loaded_count = 0
+    unfinish_count = 0
+    for root, dirs, files in os.walk(load_dir):
+        for sub_dir in tqdm(dirs):
+            sub_dir_path = os.path.join(output_dir,sub_dir)
+            load_sub_dir = os.path.join(load_dir,sub_dir)
+            if os.path.exists(sub_dir_path) == False:
+                os.makedirs(sub_dir_path)
+            filelist = os.listdir(load_sub_dir)
+            for file in filelist:
+                if not file.endswith(".sql"):
+                    continue 
+                all_count+=1
+                sql_file_name = os.path.splitext(file)[0]
+                sql_file = os.path.join(load_sub_dir,file)
+                #save_file_name = os.path.join(output_dir, f"[{PREFIX}]_[{sql_file_name}]_[{PROMPT_TYPE}].json")
+                if OVERWRITE==False and process.check_llm_answer_json(sub_dir_path, sql_file_name,suffix=PROMPT_TYPE, PREFIX_LIST=PREFIX_LIST):
+                    loaded_count+=1
+                    continue
+                # try:
+                json_dict, finish_reason, completion_tokens,prompt_tokens,total_tokens = llmpmt.get_answer_json(sql_client,model_name,sql_file,PROMPT_TYPE='field')
+
+                sql_relation_file_name = os.path.join(sub_dir_path, f"[{finish_reason}]_[{sql_file_name}]_[{PROMPT_TYPE}].json")
+                with open(sql_relation_file_name, 'w', encoding='utf-8') as f:
+                    json.dump(json_dict, f, ensure_ascii=False, indent=4)
+                if finish_reason == "stop":
+                    finish_count+=1    
+                else:
+                    unfinish_count+=1 
+                logger.info(f"[{finish_reason}]-[{sql_file_name}<{PROMPT_TYPE}>.json]-[completion_tokens:{completion_tokens},prompt_tokens:{prompt_tokens},total_tokens:{total_tokens}] ")
+                # except Exception as e:
+                #     error_count+=1
+                #     print(f"Error processing file:[{error_count}]- [{sql_file_name}<{PROMPT_TYPE}>.json]: {e}")
+    logger.info(f"total:{all_count} | finish_count:{finish_count}, unfinish_count:{unfinish_count}, loaded_count:{loaded_count}, error_count:{error_count}")
 if __name__ == "__main__":
-    ROOT_PATH = "E:\\个人\\工作\\llm-datalineage"
+    ROOT_PATH = "F:\GITClone\CMCCtest\sql-lineage\llm-datalineage"
     
     file1 = f"{ROOT_PATH}\\data\\自助sql代码格式清理-p1.xlsx"
     step1_output_dir = f"{ROOT_PATH}\\data_trans\\step1\\"
@@ -148,10 +210,14 @@ if __name__ == "__main__":
     
     
     step2_output_dir = f"{ROOT_PATH}\\data_trans\\step2\\"
-    step2_sql_postprocess(step1_output_dir, step2_output_dir,OVERWRITE=True, APPEND_JSON=True)
+    #step2_sql_postprocess(step1_output_dir, step2_output_dir,OVERWRITE=True, APPEND_JSON=True)
     
     
     #excel_file = f"{ROOT_PATH}\\data\\dataos自助相关程序配置信息 (1)(1).xlsx"
     # step3_output_dir = "F:\\GITClone\\CMCCtest\\dateline\\data_trans\\step3\\"
     # step3_sql_split_multi_feature(step2_output_dir, step3_output_dir,excel_file, OVERWRITE=True)
+    
+    
+    step3_output_dir = f"{ROOT_PATH}\\data_trans\\step3\\"
+    step3_sql_json(step2_output_dir, step3_output_dir,OVERWRITE=False)
     #process.test2()

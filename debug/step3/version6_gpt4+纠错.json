@@ -1,0 +1,193 @@
+[  
+    {  
+        "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",  
+        "target_table": "subquery_b",  
+        "order_num": 1,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "JOIN",  
+                "description": "left join (subquery_b) on a.phone_no=b.phone_no"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "dm.dim_dx_flow",  
+        "target_table": "gbasedwi.${table_name.name1}",  
+        "order_num": 1,  
+        "relation": [  
+            {  
+                "source": "plan_id",  
+                "target": "plan_id",  
+                "type": "JOIN",  
+                "description": "left join gbasedwi.${table_name.name1} b on a.plan_id=b.plan_id and a.use_type=b.use_type"  
+            },  
+            {  
+                "source": "use_type",  
+                "target": "use_type",  
+                "type": "JOIN",  
+                "description": "left join gbasedwi.${table_name.name1} b on a.plan_id=b.plan_id and a.use_type=b.use_type"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "subquery_1",  
+        "target_table": "subquery_b",  
+        "order_num": 1,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "GROUPBY",  
+                "description": "group by phone_no"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "gbasedwi.${table_name.name1}",  
+        "target_table": "subquery_c",  
+        "order_num": 1,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "GROUPBY",  
+                "description": "group by phone_no"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "dm.dim_pub_freeres_lty_itemcode",  
+        "target_table": "subquery_2",  
+        "order_num": 1,  
+        "relation": [  
+            {  
+                "source": "item_code",  
+                "target": "item_code",  
+                "type": "GROUPBY",  
+                "description": "group by item_code"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "gbasedwd.${tablename.dwdfreeres1}",  
+        "target_table": "subquery_d",  
+        "order_num": 1,  
+        "relation": [  
+            {  
+                "source": "item_code",  
+                "target": "item_code",  
+                "type": "JOIN",  
+                "description": "left join (select item_code from dm.dim_pub_freeres_lty_itemcode group by item_code) b on a.item_code=b.item_code"  
+            },  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "GROUPBY",  
+                "description": "group by a.phone_no"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "gbasemsm.msm_dw_basekpi_110673_detail_${dayid}",  
+        "target_table": "subquery_e",  
+        "order_num": 1,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "GROUPBY",  
+                "description": "group by phone_no"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "subquery_b",  
+        "target_table": "tmp_20150512_gprs_${dayid}",  
+        "order_num": 2,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "JOIN",  
+                "description": "on a.phone_no=b.phone_no"  
+            },  
+            {  
+                "source": "dg_USE_RES_NUM",  
+                "target": "dg_USE_RES_NUM",  
+                "type": "EQUAL",  
+                "description": "b.dg_USE_RES_NUM"  
+            },  
+            {  
+                "source": "dg_TOTAL_RES_NUM",  
+                "target": "dg_TOTAL_RES_NUM",  
+                "type": "EQUAL",  
+                "description": "b.dg_TOTAL_RES_NUM"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "subquery_c",  
+        "target_table": "tmp_20150512_gprs_${dayid}",  
+        "order_num": 2,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "JOIN",  
+                "description": "on a.phone_no=c.phone_no"  
+            },  
+            {  
+                "source": "zs_USE_RES_NUM",  
+                "target": "zs_USE_RES_NUM",  
+                "type": "EQUAL",  
+                "description": "c.zs_USE_RES_NUM"  
+            },  
+            {  
+                "source": "zs_TOTAL_RES_NUM",  
+                "target": "zs_TOTAL_RES_NUM",  
+                "type": "EQUAL",  
+                "description": "c.zs_TOTAL_RES_NUM"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "subquery_d",  
+        "target_table": "tmp_20150512_gprs_${dayid}",  
+        "order_num": 2,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "JOIN",  
+                "description": "on a.phone_no=d.phone_no"  
+            },  
+            {  
+                "source": "RES_USE_NUM",  
+                "target": "gprs_USE_RES_NUM",  
+                "type": "EQUAL",  
+                "description": "d.RES_USE_NUM"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "subquery_e",  
+        "target_table": "tmp_20150512_gprs_${dayid}",  
+        "order_num": 2,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "JOIN",  
+                "description": "on a.phone_no=e.phone_no"  
+            },  
+            {  
+                "source": "phone_no",  
+                "target": "is_4G_valid_user",  
+                "type": "CONDITION",  
+                "description": "case when e.phone_no is not null then 1 else 0 end"  
+            }  
+        ]  
+    }  
+]

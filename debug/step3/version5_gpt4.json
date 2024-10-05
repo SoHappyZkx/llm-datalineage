@@ -1,0 +1,248 @@
+[  
+    {  
+        "source_table": "dm.dim_dx_flow",  
+        "target_table": "subquery_b",  
+        "order_num": 1,  
+        "groupby": [],  
+        "filter": [],  
+        "join": [  
+            {  
+                "source_field": "plan_id",  
+                "target_field": "plan_id",  
+                "type_name": "left join",  
+                "description": "left join gbasedwi.${table_name.name1} on a.plan_id=b.plan_id and a.use_type=b.use_type"  
+            }  
+        ],  
+        "other": []  
+    },  
+    {  
+        "source_table": "gbasedwi.${table_name.name1}",  
+        "target_table": "subquery_b",  
+        "order_num": 1,  
+        "groupby": [  
+            {  
+                "source_field": "phone_no",  
+                "target_field": "phone_no",  
+                "type_name": "group by",  
+                "description": "group by phone_no"  
+            }  
+        ],  
+        "filter": [],  
+        "join": [],  
+        "other": [  
+            {  
+                "source_field": "USE_RES_NUM",  
+                "target_field": "dg_USE_RES_NUM",  
+                "type_name": "AGGREGATION",  
+                "description": "sum(b.USE_RES_NUM/1024/1024)"  
+            },  
+            {  
+                "source_field": "TOTAL_RES_NUM",  
+                "target_field": "dg_TOTAL_RES_NUM",  
+                "type_name": "AGGREGATION",  
+                "description": "sum(b.TOTAL_RES_NUM/1024/1024)"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "gbasedwi.${table_name.name1}",  
+        "target_table": "subquery_c",  
+        "order_num": 2,  
+        "groupby": [  
+            {  
+                "source_field": "phone_no",  
+                "target_field": "phone_no",  
+                "type_name": "group by",  
+                "description": "group by phone_no"  
+            }  
+        ],  
+        "filter": [  
+            {  
+                "source_field": "plan_id",  
+                "target_field": "zs_TOTAL_RES_NUM",  
+                "type_name": "where",  
+                "description": "where plan_id='111002069417'"  
+            }  
+        ],  
+        "join": [],  
+        "other": [  
+            {  
+                "source_field": "USE_RES_NUM",  
+                "target_field": "zs_USE_RES_NUM",  
+                "type_name": "AGGREGATION",  
+                "description": "sum(USE_RES_NUM/1024/1024)"  
+            },  
+            {  
+                "source_field": "TOTAL_RES_NUM",  
+                "target_field": "zs_TOTAL_RES_NUM",  
+                "type_name": "AGGREGATION",  
+                "description": "sum(TOTAL_RES_NUM/1024/1024)"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "gbasedwd.${tablename.dwdfreeres1}",  
+        "target_table": "subquery_d",  
+        "order_num": 3,  
+        "groupby": [  
+            {  
+                "source_field": "phone_no",  
+                "target_field": "phone_no",  
+                "type_name": "group by",  
+                "description": "group by a.phone_no"  
+            }  
+        ],  
+        "filter": [  
+            {  
+                "source_field": "boss_prod_id",  
+                "target_field": "RES_USE_NUM",  
+                "type_name": "where",  
+                "description": "where boss_prod_id not in ('54001105','53005095','50002352','54001809')"  
+            },  
+            {  
+                "source_field": "FREE_RES_TOTAL_NUM",  
+                "target_field": "RES_USE_NUM",  
+                "type_name": "where",  
+                "description": "where to_number(FREE_RES_TOTAL_NUM)<1000000000000000000"  
+            }  
+        ],  
+        "join": [  
+            {  
+                "source_field": "item_code",  
+                "target_field": "item_code",  
+                "type_name": "left join",  
+                "description": "left join (select item_code from dm.dim_pub_freeres_lty_itemcode group by item_code) b on a.item_code=b.item_code"  
+            }  
+        ],  
+        "other": [  
+            {  
+                "source_field": "FREE_RES_USE_NUM",  
+                "target_field": "RES_USE_NUM",  
+                "type_name": "CONDITION",  
+                "description": "sum(case when b.item_code is not null then a.FREE_RES_USE_NUM else 0 end)/1024"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "dm.dim_pub_freeres_lty_itemcode",  
+        "target_table": "subquery_d",  
+        "order_num": 3,  
+        "groupby": [  
+            {  
+                "source_field": "item_code",  
+                "target_field": "item_code",  
+                "type_name": "group by",  
+                "description": "group by item_code"  
+            }  
+        ],  
+        "filter": [],  
+        "join": [],  
+        "other": []  
+    },  
+    {  
+        "source_table": "gbasemsm.msm_dw_basekpi_110673_detail_${dayid}",  
+        "target_table": "subquery_e",  
+        "order_num": 4,  
+        "groupby": [  
+            {  
+                "source_field": "phone_no",  
+                "target_field": "phone_no",  
+                "type_name": "group by",  
+                "description": "group by phone_no"  
+            }  
+        ],  
+        "filter": [],  
+        "join": [],  
+        "other": []  
+    },  
+    {  
+        "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",  
+        "target_table": "tmp_20150512_gprs_${dayid}",  
+        "order_num": 5,  
+        "groupby": [],  
+        "filter": [  
+            {  
+                "source_field": "PROD_KIND_CODE",  
+                "target_field": "is_4G_valid_user",  
+                "type_name": "where",  
+                "description": "where a.PROD_KIND_CODE='171000000001'"  
+            },  
+            {  
+                "source_field": "MONTH_ARRIVE_FLAG",  
+                "target_field": "is_4G_valid_user",  
+                "type_name": "where",  
+                "description": "where (a.MONTH_ARRIVE_FLAG = 1 Or a.MONTH_OFF_FLAG = 1 or a.MONTH_NEW_FLAG = 1)"  
+            }  
+        ],  
+        "join": [  
+            {  
+                "source_field": "phone_no",  
+                "target_field": "phone_no",  
+                "type_name": "left join",  
+                "description": "left join subquery_b on a.phone_no=b.phone_no"  
+            },  
+            {  
+                "source_field": "phone_no",  
+                "target_field": "phone_no",  
+                "type_name": "left join",  
+                "description": "left join subquery_c on a.phone_no=c.phone_no"  
+            },  
+            {  
+                "source_field": "phone_no",  
+                "target_field": "phone_no",  
+                "type_name": "left join",  
+                "description": "left join subquery_d on a.phone_no=d.phone_no"  
+            },  
+            {  
+                "source_field": "phone_no",  
+                "target_field": "phone_no",  
+                "type_name": "left join",  
+                "description": "left join subquery_e on a.phone_no=e.phone_no"  
+            }  
+        ],  
+        "other": [  
+            {  
+                "source_field": "phone_no",  
+                "target_field": "phone_no",  
+                "type_name": "EQUAL",  
+                "description": "select a.phone_no"  
+            },  
+            {  
+                "source_field": "dg_USE_RES_NUM",  
+                "target_field": "dg_USE_RES_NUM",  
+                "type_name": "EQUAL",  
+                "description": "b.dg_USE_RES_NUM"  
+            },  
+            {  
+                "source_field": "dg_TOTAL_RES_NUM",  
+                "target_field": "dg_TOTAL_RES_NUM",  
+                "type_name": "EQUAL",  
+                "description": "b.dg_TOTAL_RES_NUM"  
+            },  
+            {  
+                "source_field": "zs_USE_RES_NUM",  
+                "target_field": "zs_USE_RES_NUM",  
+                "type_name": "EQUAL",  
+                "description": "c.zs_USE_RES_NUM"  
+            },  
+            {  
+                "source_field": "zs_TOTAL_RES_NUM",  
+                "target_field": "zs_TOTAL_RES_NUM",  
+                "type_name": "EQUAL",  
+                "description": "c.zs_TOTAL_RES_NUM"  
+            },  
+            {  
+                "source_field": "RES_USE_NUM",  
+                "target_field": "gprs_USE_RES_NUM",  
+                "type_name": "EQUAL",  
+                "description": "d.RES_USE_NUM"  
+            },  
+            {  
+                "source_field": "phone_no",  
+                "target_field": "is_4G_valid_user",  
+                "type_name": "CONDITION",  
+                "description": "case when e.phone_no is not null then 1 else 0 end"  
+            }  
+        ]  
+    }  
+]

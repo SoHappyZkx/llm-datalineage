@@ -1,0 +1,5 @@
+2024-10-05 18:38:52 | 【INFO】<run>@<step3_sql_json> | [META]-[2012年12月新增指标-109<field>.json]-[completion_tokens:1454,prompt_tokens:2,total_tokens:1456] 
+2024-10-05 18:38:54 | 【INFO】<run>@<step3_sql_json> | [META]-[2012年12月新增指标-116<field>.json]-[completion_tokens:1755,prompt_tokens:2,total_tokens:1757] 
+2024-10-05 18:38:55 | 【INFO】<run>@<step3_sql_json> | [META]-[2012年12月新增指标-121<field>.json]-[completion_tokens:1705,prompt_tokens:2,total_tokens:1707] 
+2024-10-05 18:45:57 | 【INFO】<run>@<step3_sql_json> | [stop]-[2012年12月新增指标-124<field>.json]-[completion_tokens:2345,prompt_tokens:6460,total_tokens:8805] 
+2024-10-05 18:47:01 | 【INFO】<run>@<step3_sql_json> | [stop]-[2012年12月新增指标-131<field>.json]-[completion_tokens:1608,prompt_tokens:974,total_tokens:2582] 

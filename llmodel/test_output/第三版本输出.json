@@ -1,0 +1,91 @@
+{"prompt":"你是一个SQL代码专家，请你帮我直接从上述SQL代码中提取出所有出现的字段的四元组关系，以及所有出现的表关系( 包括了有命名的表，和没有命名的子查询表,没有命名的子查询请以subquery_为前缀命名）。
+        ## 表关系：
+        要求任意两个相关的表，应该有source_table, target_table两个字段，描述两张表的名字，以database.table的格式输出，如果没有database就忽略。
+        同时有一个list，有若干组关系字段记录。每组结构如下[source_field, target_table, relation_type, description].
+        source_field和target_field是相关的具体字段名, 记录的是是两个表之间进行关联的字段。source_field就是source_table里的字段， target_field就是 target_table里的字段。
+        relation_type分为如下几个类别。
+        1.AGGREGATION:对字段进行了聚合操作，让整个表的行数发生了变化，比如INSERT INTO table2 (column1) SELECT SUM(column1) FROM table1;
+        其他的如count(),sum(),avg(),min(),max()等函数都算在其中。
+        2. FILTER: 表示一个表由另几个字段根据某些条件过滤得来。 比如INSERT INTO tbale2 (column1) SELECT * FROM table1 WHERE (column1) > 30;
+        where, having, limit, offset, distinct 等都算在FILTER其中.
+        3.JOIN:两个表通过JOIN操作连接起来，新的表的结果行数发生了一些变化。比如INSERT INTO table2 (column1) SELECT table1.column1 FROM table1 JOIN table2 ON table1.id = table2.id;
+        left join， inner join，full join，union，union all 等都算在JOIN。但**注意** 需要JOIN标注出具体是哪种。 比如 JOIN(LEFT) JOIN(UNION).
+        最后的description记录了relation相关的源sql代码。
+        
+        ## 四元组关系 
+        要求记录所有出现的字段的关系。四元组结构如下[source_field, target_field, relationship, description]。 
+        其中source_field和target_field是相关的具体字段名，以database.table.field格式输出,如果没有database,那么就忽略。如果是中间的子查询临时表，请以subquery_为前缀命名，保证和表关系里的子查询名字一一对应。
+        relationship表示source_field和target_field的计算关系，有以下几个类别type:
+        1.EQUAL:一个字段直接赋值到另一个字段，没有任何变化， 比如INSERT INTO table2 (column1) SELECT column1 FROM table1; 
+        2.STRING:一个字段经过了某种简单映射，变成了另一个字段 比如INSERT INTO table2 (column1) SELECT UPPER(column1) FROM table1;
+        length(),concat(),substring(),upper(),lower(),replace(),trim()等字符计算都是STRING.
+        3.NUMERICAL: 一个字段由另一个字段进行一些基础运算，比如INSERT INTO table2 (column1) SELECT column2 * 2 FROM table1;
+        还有很多其他的比如 +,-,*,/,% 基本数学运算,abs(),ceil(),round(),power()等等数值计算的函数，都算在NUMERICAL.
+        4.CONDITION:根据一些条件，进行比较复杂的映射，比如INSERT INTO table2 (column1) SELECT CASE WHEN column1 > 0 THEN 'Positive' ELSE 'Non-Positive' END FROM table1;
+        5.TRANS:一个字段由另一个字段进行了格式转换或者日期转化而来。比如INTO table2 (column1) SELECT  CONVERT('2023-10-01', DATE); FROM table1;
+        其他如curtime()，curdate()等等日期操作，cast(),convert()等都算在TRANS里.  
+        6.WINDOW: 一个字段由另一个字段使用窗口函数进行了运算，比如INSERT INTO table2 (column1) SELECT  ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num  FROM table1;
+        其他的如rank(),lead(),lag(),dense_rank()等也算在其中。
+        7.OTHERS: 其它无法明确分类的请划分在这里.
+        description直接记录了两个字段相关的源SQL代码
+        请注意四元组与表关系里，description的sql代码，尽可能准确分配，不要遗漏或者重复记录过多。保证能还原会源代码即可。
+        最终按顺序分别输出表关系和四元组关系的json结果，且只输出json内容，完成呈现。
+"}
+
+
+{
+    "table_relations": [
+      {
+        "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",
+        "target_table": "subquery_b",
+        "relations": [
+          ["phone_no", "phone_no", "JOIN(LEFT)", "left join (select  b.phone_no,sum(b.USE_RES_NUM/1024/1024) dg_USE_RES_NUM,sum(b.TOTAL_RES_NUM/1024/1024) dg_TOTAL_RES_NUM from dm.dim_dx_flow a left join gbasedwi.${table_name.name1} b on a.plan_id=b.plan_id and a.use_type=b.use_type group by phone_no ) b on a.phone_no=b.phone_no"]
+        ]
+      },
+      {
+        "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",
+        "target_table": "subquery_c",
+        "relations": [
+          ["phone_no", "phone_no", "JOIN(LEFT)", "left join ( select  phone_no,sum(USE_RES_NUM/1024/1024) zs_USE_RES_NUM,sum(TOTAL_RES_NUM/1024/1024) zs_TOTAL_RES_NUM from gbasedwi.${table_name.name1} where plan_id='111002069417' group by phone_no ) c on a.phone_no=c.phone_no"]
+        ]
+      },
+      {
+        "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",
+        "target_table": "subquery_d",
+        "relations": [
+          ["phone_no", "phone_no", "JOIN(LEFT)", "left join ( select phone_no,sum(case when b.item_code is not null then a.FREE_RES_USE_NUM else 0 end)/1024 RES_USE_NUM from gbasedwd.${tablename.dwdfreeres1} a left join ( select item_code from dm.dim_pub_freeres_lty_itemcode group by item_code ) b on a.item_code=b.item_code where boss_prod_id not in ('54001105','53005095','50002352','54001809') and to_number(FREE_RES_TOTAL_NUM)<1000000000000000000 group by a.phone_no ) d on a.phone_no=d.phone_no"]
+        ]
+      },
+      {
+        "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",
+        "target_table": "subquery_e",
+        "relations": [
+          ["phone_no", "phone_no", "JOIN(LEFT)", "left join ( select phone_no from gbasemsm.msm_dw_basekpi_110673_detail_${dayid} group by phone_no ) e on a.phone_no=e.phone_no"]
+        ]
+      },
+      {
+        "source_table": "dm.dim_dx_flow",
+        "target_table": "gbasedwi.${table_name.name1}",
+        "relations": [
+          ["plan_id", "plan_id", "JOIN", "left join gbasedwi.${table_name.name1} b on a.plan_id=b.plan_id and a.use_type=b.use_type"],
+          ["use_type", "use_type", "JOIN", "left join gbasedwi.${table_name.name1} b on a.plan_id=b.plan_id and a.use_type=b.use_type"]
+        ]
+      },
+      {
+        "source_table": "gbasedwd.${tablename.dwdfreeres1}",
+        "target_table": "dm.dim_pub_freeres_lty_itemcode",
+        "relations": [
+          ["item_code", "item_code", "JOIN", "left join ( select item_code from dm.dim_pub_freeres_lty_itemcode group by item_code ) b on a.item_code=b.item_code"]
+        ]
+      }
+    ],
+    "field_relations": [
+      ["gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}.phone_no", "tmp_20150512_gprs_${dayid}.phone_no", "EQUAL", "select a.phone_no,"],
+      ["subquery_b.dg_USE_RES_NUM", "tmp_20150512_gprs_${dayid}.dg_USE_RES_NUM", "EQUAL", "select a.phone_no,b.dg_USE_RES_NUM,"],
+      ["subquery_b.dg_TOTAL_RES_NUM", "tmp_20150512_gprs_${dayid}.dg_TOTAL_RES_NUM", "EQUAL", "select a.phone_no,b.dg_USE_RES_NUM,b.dg_TOTAL_RES_NUM,"],
+      ["subquery_c.zs_USE_RES_NUM", "tmp_20150512_gprs_${dayid}.zs_USE_RES_NUM", "EQUAL", "select a.phone_no,b.dg_USE_RES_NUM,b.dg_TOTAL_RES_NUM,c.zs_USE_RES_NUM,"],
+      ["subquery_c.zs_TOTAL_RES_NUM", "tmp_20150512_gprs_${dayid}.zs_TOTAL_RES_NUM", "EQUAL", "select a.phone_no,b.dg_USE_RES_NUM,b.dg_TOTAL_RES_NUM,c.zs_USE_RES_NUM,c.zs_TOTAL_RES_NUM,"],
+      ["subquery_d.RES_USE_NUM", "tmp_20150512_gprs_${dayid}.gprs_USE_RES_NUM", "EQUAL", "select a.phone_no,b.dg_USE_RES_NUM,b.dg_TOTAL_RES_NUM,c.zs_USE_RES_NUM,c.zs_TOTAL_RES_NUM,d.RES_USE_NUM,"],
+      ["subquery_e.phone_no", "tmp_20150512_gprs_${dayid}.is_4G_valid_user", "CONDITION", "case when e.phone_no is not null then 1 else 0 end is_4G_valid_user"]
+    ]
+  }

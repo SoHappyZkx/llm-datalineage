@@ -1,0 +1,130 @@
+[  
+    {  
+        "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",  
+        "target_table": "subquery_b",  
+        "order_num": 5,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "JOIN",  
+                "description": "a.phone_no = b.phone_no"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "dm.dim_dx_flow",  
+        "target_table": "subquery_b",  
+        "order_num": 4,  
+        "relation": [  
+            {  
+                "source": "plan_id",  
+                "target": "plan_id",  
+                "type": "JOIN",  
+                "description": "a.plan_id = b.plan_id AND a.use_type = b.use_type"  
+            },  
+            {  
+                "source": "use_type",  
+                "target": "use_type",  
+                "type": "JOIN",  
+                "description": "a.plan_id = b.plan_id AND a.use_type = b.use_type"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "gbasedwi.${table_name.name1}",  
+        "target_table": "subquery_b",  
+        "order_num": 4,  
+        "relation": [  
+            {  
+                "source": "plan_id",  
+                "target": "plan_id",  
+                "type": "JOIN",  
+                "description": "a.plan_id = b.plan_id AND a.use_type = b.use_type"  
+            },  
+            {  
+                "source": "use_type",  
+                "target": "use_type",  
+                "type": "JOIN",  
+                "description": "a.plan_id = b.plan_id AND a.use_type = b.use_type"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "gbasedwi.${table_name.name1}",  
+        "target_table": "subquery_c",  
+        "order_num": 4,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "GROUPBY",  
+                "description": "group by phone_no"  
+            },  
+            {  
+                "source": "plan_id",  
+                "target": "plan_id",  
+                "type": "FILTER",  
+                "description": "WHERE plan_id='111002069417'"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "gbasedwd.${tablename.dwdfreeres1}",  
+        "target_table": "subquery_d",  
+        "order_num": 4,  
+        "relation": [  
+            {  
+                "source": "item_code",  
+                "target": "item_code",  
+                "type": "JOIN",  
+                "description": "a.item_code = b.item_code"  
+            },  
+            {  
+                "source": "boss_prod_id",  
+                "target": "boss_prod_id",  
+                "type": "FILTER",  
+                "description": "WHERE boss_prod_id NOT IN (...)"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "dm.dim_pub_freeres_lty_itemcode",  
+        "target_table": "subquery_d",  
+        "order_num": 3,  
+        "relation": [  
+            {  
+                "source": "item_code",  
+                "target": "item_code",  
+                "type": "GROUPBY",  
+                "description": "group by item_code"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",  
+        "target_table": "subquery_d",  
+        "order_num": 5,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "JOIN",  
+                "description": "a.phone_no = d.phone_no"  
+            }  
+        ]  
+    },  
+    {  
+        "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",  
+        "target_table": "subquery_e",  
+        "order_num": 5,  
+        "relation": [  
+            {  
+                "source": "phone_no",  
+                "target": "phone_no",  
+                "type": "JOIN",  
+                "description": "a.phone_no = e.phone_no"  
+            }  
+        ]  
+    }  
+]

@@ -1,0 +1,277 @@
+[  
+  {  
+    "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",  
+    "target_table": "tmp_20150512_gprs_${dayid}",  
+    "order_num": 1,  
+    "relation": [  
+      {  
+        "source": "phone_no",  
+        "target": "phone_no",  
+        "type": "OTHER",  
+        "description": "SELECT a.phone_no"  
+      },  
+      {  
+        "source": "PROD_KIND_CODE",  
+        "target": "phone_no",  
+        "type": "FILTER",  
+        "description": "WHERE a.PROD_KIND_CODE='171000000001'"  
+      },  
+      {  
+        "source": "MONTH_ARRIVE_FLAG",  
+        "target": "phone_no",  
+        "type": "FILTER",  
+        "description": "WHERE (a.MONTH_ARRIVE_FLAG = 1 Or a.MONTH_OFF_FLAG = 1 or a.MONTH_NEW_FLAG = 1)"  
+      },  
+      {  
+        "source": "MONTH_OFF_FLAG",  
+        "target": "phone_no",  
+        "type": "FILTER",  
+        "description": "WHERE (a.MONTH_ARRIVE_FLAG = 1 Or a.MONTH_OFF_FLAG = 1 or a.MONTH_NEW_FLAG = 1)"  
+      },  
+      {  
+        "source": "MONTH_NEW_FLAG",  
+        "target": "phone_no",  
+        "type": "FILTER",  
+        "description": "WHERE (a.MONTH_ARRIVE_FLAG = 1 Or a.MONTH_OFF_FLAG = 1 or a.MONTH_NEW_FLAG = 1)"  
+      }  
+    ]  
+  },  
+  {  
+    "source_table": "dm.dim_dx_flow",  
+    "target_table": "subquery_dg_flow",  
+    "order_num": 3,  
+    "relation": [  
+      {  
+        "source": "plan_id",  
+        "target": "plan_id",  
+        "type": "JOIN",  
+        "description": "LEFT JOIN gbasedwi.${table_name.name1} b ON a.plan_id=b.plan_id AND a.use_type=b.use_type"  
+      },  
+      {  
+        "source": "use_type",  
+        "target": "use_type",  
+        "type": "JOIN",  
+        "description": "LEFT JOIN gbasedwi.${table_name.name1} b ON a.plan_id=b.plan_id AND a.use_type=b.use_type"  
+      }  
+    ]  
+  },  
+  {  
+    "source_table": "gbasedwi.${table_name.name1}",  
+    "target_table": "subquery_dg_flow",  
+    "order_num": 3,  
+    "relation": [  
+      {  
+        "source": "phone_no",  
+        "target": "phone_no",  
+        "type": "GROUPBY",  
+        "description": "GROUP BY phone_no"  
+      },  
+      {  
+        "source": "USE_RES_NUM",  
+        "target": "dg_USE_RES_NUM",  
+        "type": "OTHER",  
+        "description": "SUM(b.USE_RES_NUM/1024/1024) dg_USE_RES_NUM"  
+      },  
+      {  
+        "source": "TOTAL_RES_NUM",  
+        "target": "dg_TOTAL_RES_NUM",  
+        "type": "OTHER",  
+        "description": "SUM(b.TOTAL_RES_NUM/1024/1024) dg_TOTAL_RES_NUM"  
+      },  
+      {  
+        "source": "plan_id",  
+        "target": "plan_id",  
+        "type": "JOIN",  
+        "description": "LEFT JOIN gbasedwi.${table_name.name1} b ON a.plan_id=b.plan_id AND a.use_type=b.use_type"  
+      },  
+      {  
+        "source": "use_type",  
+        "target": "use_type",  
+        "type": "JOIN",  
+        "description": "LEFT JOIN gbasedwi.${table_name.name1} b ON a.plan_id=b.plan_id AND a.use_type=b.use_type"  
+      }  
+    ]  
+  },  
+  {  
+    "source_table": "subquery_dg_flow",  
+    "target_table": "tmp_20150512_gprs_${dayid}",  
+    "order_num": 2,  
+    "relation": [  
+      {  
+        "source": "phone_no",  
+        "target": "phone_no",  
+        "type": "JOIN",  
+        "description": "LEFT JOIN (...) b ON a.phone_no=b.phone_no"  
+      },  
+      {  
+        "source": "dg_USE_RES_NUM",  
+        "target": "dg_USE_RES_NUM",  
+        "type": "OTHER",  
+        "description": "SELECT b.dg_USE_RES_NUM"  
+      },  
+      {  
+        "source": "dg_TOTAL_RES_NUM",  
+        "target": "dg_TOTAL_RES_NUM",  
+        "type": "OTHER",  
+        "description": "SELECT b.dg_TOTAL_RES_NUM"  
+      }  
+    ]  
+  },  
+  {  
+    "source_table": "gbasedwi.${table_name.name1}",  
+    "target_table": "subquery_zs_flow",  
+    "order_num": 3,  
+    "relation": [  
+      {  
+        "source": "phone_no",  
+        "target": "phone_no",  
+        "type": "GROUPBY",  
+        "description": "GROUP BY phone_no"  
+      },  
+      {  
+        "source": "USE_RES_NUM",  
+        "target": "zs_USE_RES_NUM",  
+        "type": "OTHER",  
+        "description": "SUM(USE_RES_NUM/1024/1024) zs_USE_RES_NUM"  
+      },  
+      {  
+        "source": "TOTAL_RES_NUM",  
+        "target": "zs_TOTAL_RES_NUM",  
+        "type": "OTHER",  
+        "description": "SUM(TOTAL_RES_NUM/1024/1024) zs_TOTAL_RES_NUM"  
+      },  
+      {  
+        "source": "plan_id",  
+        "target": "plan_id",  
+        "type": "FILTER",  
+        "description": "WHERE plan_id='111002069417'"  
+      }  
+    ]  
+  },  
+  {  
+    "source_table": "subquery_zs_flow",  
+    "target_table": "tmp_20150512_gprs_${dayid}",  
+    "order_num": 2,  
+    "relation": [  
+      {  
+        "source": "phone_no",  
+        "target": "phone_no",  
+        "type": "JOIN",  
+        "description": "LEFT JOIN (...) c ON a.phone_no=c.phone_no"  
+      },  
+      {  
+        "source": "zs_USE_RES_NUM",  
+        "target": "zs_USE_RES_NUM",  
+        "type": "OTHER",  
+        "description": "SELECT c.zs_USE_RES_NUM"  
+      },  
+      {  
+        "source": "zs_TOTAL_RES_NUM",  
+        "target": "zs_TOTAL_RES_NUM",  
+        "type": "OTHER",  
+        "description": "SELECT c.zs_TOTAL_RES_NUM"  
+      }  
+    ]  
+  },  
+  {  
+    "source_table": "gbasedwd.${tablename.dwdfreeres1}",  
+    "target_table": "subquery_gprs_use",  
+    "order_num": 3,  
+    "relation": [  
+      {  
+        "source": "phone_no",  
+        "target": "phone_no",  
+        "type": "GROUPBY",  
+        "description": "GROUP BY a.phone_no"  
+      },  
+      {  
+        "source": "FREE_RES_USE_NUM",  
+        "target": "RES_USE_NUM",  
+        "type": "OTHER",  
+        "description": "SUM(CASE WHEN b.item_code IS NOT NULL THEN a.FREE_RES_USE_NUM ELSE 0 END)/1024 RES_USE_NUM"  
+      },  
+      {  
+        "source": "item_code",  
+        "target": "item_code",  
+        "type": "JOIN",  
+        "description": "LEFT JOIN (...) b ON a.item_code=b.item_code"  
+      },  
+      {  
+        "source": "boss_prod_id",  
+        "target": "RES_USE_NUM",  
+        "type": "FILTER",  
+        "description": "WHERE boss_prod_id NOT IN ('54001105','53005095','50002352','54001809')"  
+      },  
+      {  
+        "source": "FREE_RES_TOTAL_NUM",  
+        "target": "RES_USE_NUM",  
+        "type": "FILTER",  
+        "description": "AND to_number(FREE_RES_TOTAL_NUM)<1000000000000000000"  
+      }  
+    ]  
+  },  
+  {  
+    "source_table": "dm.dim_pub_freeres_lty_itemcode",  
+    "target_table": "subquery_gprs_use",  
+    "order_num": 4,  
+    "relation": [  
+      {  
+        "source": "item_code",  
+        "target": "item_code",  
+        "type": "JOIN",  
+        "description": "LEFT JOIN (...) b ON a.item_code=b.item_code"  
+      }  
+    ]  
+  },  
+  {  
+    "source_table": "subquery_gprs_use",  
+    "target_table": "tmp_20150512_gprs_${dayid}",  
+    "order_num": 2,  
+    "relation": [  
+      {  
+        "source": "phone_no",  
+        "target": "phone_no",  
+        "type": "JOIN",  
+        "description": "LEFT JOIN (...) d ON a.phone_no=d.phone_no"  
+      },  
+      {  
+        "source": "RES_USE_NUM",  
+        "target": "gprs_USE_RES_NUM",  
+        "type": "OTHER",  
+        "description": "SELECT d.RES_USE_NUM"  
+      }  
+    ]  
+  },  
+  {  
+    "source_table": "gbasemsm.msm_dw_basekpi_110673_detail_${dayid}",  
+    "target_table": "subquery_4g_valid",  
+    "order_num": 3,  
+    "relation": [  
+      {  
+        "source": "phone_no",  
+        "target": "phone_no",  
+        "type": "GROUPBY",  
+        "description": "GROUP BY phone_no"  
+      }  
+    ]  
+  },  
+  {  
+    "source_table": "subquery_4g_valid",  
+    "target_table": "tmp_20150512_gprs_${dayid}",  
+    "order_num": 2,  
+    "relation": [  
+      {  
+        "source": "phone_no",  
+        "target": "phone_no",  
+        "type": "JOIN",  
+        "description": "LEFT JOIN (...) e ON a.phone_no=e.phone_no"  
+      },  
+      {  
+        "source": "phone_no",  
+        "target": "is_4G_valid_user",  
+        "type": "OTHER",  
+        "description": "CASE WHEN e.phone_no IS NOT NULL THEN 1 ELSE 0 END is_4G_valid_user"  
+      }  
+    ]  
+  }  
+]

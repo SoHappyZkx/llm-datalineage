@@ -1,0 +1,159 @@
+[
+    {
+        "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",
+        "target_table": "subquery_1",
+        "order_num": 2,
+        "relation": [
+            {
+                "source": "phone_no",
+                "target": "phone_no",
+                "description": "ON a.phone_no=b.phone_no"
+            },
+            {
+                "source": "plan_id",
+                "target": "",
+                "description": "ON a.plan_id=b.plan_id"
+            },
+            {
+                "source": "use_type",
+                "target": "",
+                "description": "AND a.use_type=b.use_type"
+            }
+        ]
+    },
+    {
+        "source_table": "dm.dim_dx_flow",
+        "target_table": "subquery_1",
+        "order_num": 1,
+        "relation": [
+            {
+                "source": "plan_id",
+                "target": "plan_id",
+                "description": "ON a.plan_id=b.plan_id"
+            },
+            {
+                "source": "use_type",
+                "target": "use_type",
+                "description": "AND a.use_type=b.use_type"
+            }
+        ]
+    },
+    {
+        "source_table": "${table_name.name1}",
+        "target_table": "subquery_1",
+        "order_num": 1,
+        "relation": [
+            {
+                "source": "plan_id",
+                "target": "plan_id",
+                "description": "ON a.plan_id=b.plan_id"
+            },
+            {
+                "source": "use_type",
+                "target": "use_type",
+                "description": "AND a.use_type=b.use_type"
+            }
+        ]
+    },
+    {
+        "source_table": "subquery_1",
+        "target_table": "subquery_2",
+        "order_num": 2,
+        "relation": [
+            {
+                "source": "phone_no",
+                "target": "phone_no",
+                "description": "ON a.phone_no=c.phone_no"
+            }
+        ]
+    },
+    {
+        "source_table": "${table_name.name1}",
+        "target_table": "subquery_2",
+        "order_num": 1,
+        "relation": [
+            {
+                "source": "phone_no",
+                "target": "phone_no",
+                "description": "ON a.phone_no=c.phone_no"
+            }
+        ]
+    },
+    {
+        "source_table": "subquery_2",
+        "target_table": "subquery_3",
+        "order_num": 2,
+        "relation": [
+            {
+                "source": "phone_no",
+                "target": "phone_no",
+                "description": "ON a.phone_no=d.phone_no"
+            }
+        ]
+    },
+    {
+        "source_table": "${tablename.dwdfreeres1}",
+        "target_table": "subquery_3",
+        "order_num": 1,
+        "relation": [
+            {
+                "source": "item_code",
+                "target": "",
+                "description": "ON a.item_code=b.item_code"
+            },
+            {
+                "source": "phone_no",
+                "target": "phone_no",
+                "description": "ON a.phone_no=d.phone_no"
+            }
+        ]
+    },
+    {
+        "source_table": "dm.dim_pub_freeres_lty_itemcode",
+        "target_table": "subquery_3",
+        "order_num": 1,
+        "relation": [
+            {
+                "source": "item_code",
+                "target": "item_code",
+                "description": "ON a.item_code=b.item_code"
+            }
+        ]
+    },
+    {
+        "source_table": "subquery_3",
+        "target_table": "subquery_4",
+        "order_num": 2,
+        "relation": [
+            {
+                "source": "phone_no",
+                "target": "phone_no",
+                "description": "ON a.phone_no=e.phone_no"
+            }
+        ]
+    },
+    {
+        "source_table": "gbasemsm.msm_dw_basekpi_110673_detail_${dayid}",
+        "target_table": "subquery_4",
+        "order_num": 1,
+        "relation": [
+            {
+                "source": "phone_no",
+                "target": "phone_no",
+                "description": "ON a.phone_no=e.phone_no"
+            }
+        ]
+    },
+    {
+        "source_table": "subquery_4",
+        "target_table": "tmp_20150512_gprs_${dayid}",
+        "order_num": 1,
+        "relation": [
+            {
+                "source": "phone_no",
+                "target": "phone_no",
+                "description": "FROM gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid} a LEFT JOIN (...) b ON a.phone_no=b.phone_no LEFT JOIN (...) c ON a.phone_no=c.phone_no LEFT JOIN (...) d ON a.phone_no=d.phone_no LEFT JOIN (...) e ON a.phone_no=e.phone_no"
+            }
+        ]
+    }
+]

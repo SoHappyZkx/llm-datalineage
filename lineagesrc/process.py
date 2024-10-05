@@ -6,6 +6,16 @@ import pandas as pd
 import normalize
 import dataclass
 import pickle
+
+'''
+用于检查是否已经有llm生成的结果文件存在了
+'''
+def check_llm_answer_json(filedir, filename,file_type = '.json',suffix='', PREFIX_LIST=[]):
+    for p in PREFIX_LIST: 
+        if os.path.exists(os.path.join(filedir, f"[{p}]_[{filename}]_[{suffix}]{file_type}")):
+            return True
+    return False
+
 '''
 检查是否为空的，无字符的，没有key的内容
 '''
@@ -383,6 +393,7 @@ def _debug_static_tables(table_obj_dict):
           BOTH_NOT_FOUND_COUNT:{BOTH_NOT_FOUND_COUNT}, \
           all_count：{all_count} ")
     return _both_paired_list
+
 def test1():
     file1 = "F:\\GITClone\\CMCCtest\\dateline\\data\\dataos自助相关程序配置信息 (1)(1).xlsx"
     file2 = "F:\\GITClone\\CMCCtest\\dateline\\data\\自助数据字典(2).xlsx"

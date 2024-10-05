@@ -1,0 +1,94 @@
+[  
+    {  
+        "source_table": "gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid}",  
+        "target_table": "tmp_20150512_gprs_${dayid}",  
+        "order_num": 1,  
+        "relation": [  
+            {"source": "phone_no", "target": "phone_no", "description": "select a.phone_no from gbasedwi.dwi_usr_pesn_partinfo_ds_${dayid} a"}  
+        ]  
+    },  
+    {  
+        "source_table": "subquery_1",  
+        "target_table": "tmp_20150512_gprs_${dayid}",  
+        "order_num": 1,  
+        "relation": [  
+            {"source": "phone_no", "target": "phone_no", "description": "select b.phone_no from subquery_1 b"}  
+        ]  
+    },  
+    {  
+        "source_table": "subquery_2",  
+        "target_table": "tmp_20150512_gprs_${dayid}",  
+        "order_num": 1,  
+        "relation": [  
+            {"source": "phone_no", "target": "phone_no", "description": "select c.phone_no from subquery_2 c"}  
+        ]  
+    },  
+    {  
+        "source_table": "subquery_3",  
+        "target_table": "tmp_20150512_gprs_${dayid}",  
+        "order_num": 1,  
+        "relation": [  
+            {"source": "phone_no", "target": "phone_no", "description": "select d.phone_no from subquery_3 d"}  
+        ]  
+    },  
+    {  
+        "source_table": "subquery_4",  
+        "target_table": "tmp_20150512_gprs_${dayid}",  
+        "order_num": 1,  
+        "relation": [  
+            {"source": "phone_no", "target": "phone_no", "description": "select e.phone_no from subquery_4 e"}  
+        ]  
+    },  
+    {  
+        "source_table": "dm.dim_dx_flow",  
+        "target_table": "subquery_1",  
+        "order_num": 5,  
+        "relation": [  
+          {"source": "plan_id", "target": "plan_id", "description": "left join gbasedwi.${table_name.name1} on dm.dim_dx_flow.plan_id = ${table_name.name1}.plan_id"},  
+          {"source": "use_type", "target": "use_type", "description": "left join gbasedwi.${table_name.name1} on dm.dim_dx_flow.use_type = ${table_name.name1}.use_type"}  
+       ]  
+    },  
+    {  
+        "source_table": "gbasedwi.${table_name.name1}",  
+        "target_table": "subquery_1",  
+        "order_num":5,  
+        "relation": [  
+          {"source": "phone_no", "target": "phone_no", "description": "group by phone_no"}  
+      ]  
+    },  
+    {  
+        "source_table": "gbasedwi.${table_name.name1}",  
+        "target_table": "subquery_2",  
+        "order_num": 4,  
+        "relation": [  
+          {"source": "phone_no", "target": "phone_no", "description": "group by phone_no"}  
+      ]  
+    },  
+    
+    {  
+      "source_table": "gbasedwd.${tablename.dwdfreeres1}",  
+      "target_table": "subquery_3",  
+      "order_num": 3,  
+      "relation": [  
+          {"source": "item_code", "target": "item_code", "description": "left join (select item_code from dm.dim_pub_freeres_lty_itemcode) on ${tablename.dwdfreeres1}.item_code = item_code"}  
+        ]  
+    },  
+
+    {  
+      "source_table": "dm.dim_pub_freeres_lty_itemcode",  
+      "target_table": "subquery_3",  
+      "order_num":3,  
+      "relation": [  
+          {"source": "item_code", "target": "", "description": "group by item_code"}  
+        ]  
+    },  
+
+    {  
+      "source_table": "gbasemsm.msm_dw_basekpi_110673_detail_${dayid}",  
+      "target_table": "subquery_4",  
+      "order_num":2,  
+      "relation": [  
+          {"source": "phone_no", "target": "phone_no", "description": "group by phone_no"}  
+        ]  
+    }  
+]

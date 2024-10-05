@@ -10,7 +10,11 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "env":{
+                "ROOT_PATH":"${workspaceFolder}",
+                "GENIMI_KEY":"AIzaSyA1JOXcA0B-sXcMli2926VsgMQfkh6BKtI"
+            }
         }
     ]
 }

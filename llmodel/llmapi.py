@@ -129,14 +129,14 @@ def init_client(API_KEY:str,PLATFORM:str) -> OpenAI:
     return client
 
 
-def test_get_sql_code(filepath):
+def get_sql_code(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
         sql_code_str = f.read()
     return sql_code_str
 
 
-def test1():
-    filepath = "F:\\GITClone\\CMCCtest\\dateline\\config\\llm_conf.yaml"
+def test1(ROOT_PATH):
+    filepath = f"{ROOT_PATH}\\config\\llm_conf.yaml"
     API_KEY = "sk-fbd56500a79e44a79ceaae02d567f25e"
     PLATFORM = "qwen".upper()
     model_name = "qwen-turbo"
@@ -144,8 +144,8 @@ def test1():
     #question = "能否帮我介绍一些机器学习算法？"
     
     
-    sql_file = "F:\\GITClone\\CMCCtest\\sql-lineage\\llm-datalineage\\data_trans\\step2\\客服表--DM_AUTORPT_CS_YYYYMM\\客服表--DM_AUTORPT_CS_YYYYMM-10.sql"
-    sql_code = test_get_sql_code(sql_file)
+    sql_file = f"{ROOT_PATH}\\data_trans\\step2\\客服表--DM_AUTORPT_CS_YYYYMM\\客服表--DM_AUTORPT_CS_YYYYMM-10.sql"
+    sql_code = get_sql_code(sql_file)
     question = f"下面这段sql讲的是什么?{sql_code}"
     client = init_client(API_KEY,PLATFORM)
     answer_content, finish_reason, completion_tokens,prompt_tokens,total_tokens = get_response(client, model_name, system_prompt, question)
@@ -154,28 +154,39 @@ def test1():
     print(prompt_tokens, completion_tokens, total_tokens)
 
 
-def test2():
-    filepath = "F:\\GITClone\\CMCCtest\\dateline\\config\\llm_conf.yaml"
+def test2(ROOT_PATH):
+    filepath = f"{ROOT_PATH}\\config\\llm_conf.yaml"
     API_KEY = "sk-fbd56500a79e44a79ceaae02d567f25e"
     PLATFORM = "qwen".upper()
-    model_name = "qwen-long"
+    model_name = "qwen-max-latest"
+    #qwen-max(32k);qwen-plus(128k);qwen-turbo(128k); qwen-long(1wk)
     system_prompt = "You are a helpful assistant."
     #question = "能否帮我介绍一些机器学习算法？"
     
     
-    sql_file = "F:\\GITClone\\CMCCtest\\sql-lineage\\llm-datalineage\\data_trans\\step2\\服务使用表（语音）--AUTORPT\\服务使用表（语音）--AUTORPT-17.sql"
-    sql_code = test_get_sql_code(sql_file)
+    sql_file = f"{ROOT_PATH}\\data_trans\\step2\\服务使用表（语音）--AUTORPT\\服务使用表（语音）--AUTORPT-17.sql"
+    sql_code = get_sql_code(sql_file)
     system_prompt_list = [system_prompt, sql_code]
     question = """ 请把这段sql代码中所有的表名和字段名输出，使用json格式，格式如下：'{"表名1":["字段名1","字段名2","字段名3], "表名2":["字段名4","字段名5"]}' 注意不要其他任何描述和结论，只要输出json内容"""
     client = init_client(API_KEY,PLATFORM)
-    answer_content, finish_reason, completion_tokens,prompt_tokens,total_tokens = get_response(client, model_name, system_prompt_list, question,stream=False)
+    answer_content, finish_reason, completion_tokens,prompt_tokens,total_tokens = get_response(client, model_name, system_prompt_list, question,stream=True)
     
     print(answer_content)
     print(finish_reason)
     print(prompt_tokens, completion_tokens, total_tokens)
 
+def test3(ROOT_PATH):
+    import google.generativeai as genai
+    import os
+    genai.configure(api_key=os.environ["GENIMI_KEY"])
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    print("start")
+    response = model.generate_content("Write a story about a magic backpack.",stream=True)
+    print(response.text)
 if __name__ == "__main__":
+    ROOT_PATH = os.environ['ROOT_PATH']
     print("")
-    #test1()
-    #test2()
+    #test1(ROOT_PATH)
+    #test2(ROOT_PATH)
+    test3(ROOT_PATH)
     
